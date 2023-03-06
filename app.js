@@ -23,6 +23,7 @@ let equalBtn = document.querySelector("#equal");
 let figure = []; //all the number that click on will be pushed into the figure array
 let operand1 = null;  //first operand
 let operand2 = false; // waiting for second operand will be false 
+let operand3 = false; // waiting for second operand will be false 
 let operator = null; 
 let screenValue = 0;
 
@@ -31,17 +32,22 @@ let screenValue = 0;
 
 [...numbers].forEach((number)=> number.addEventListener("click",(number)=>{
 	//when current value is 0 displaying on the screen, take in figures into the array, set the joint array as currentvalue
-	if(screenValue==="0" || operand2===true){
+	if(screenValue==="0" || operand2===true && operand3=== false){
 		figure.push( parseFloat(number.target.innerText));
 		screenValue = parseFloat(figure.join("")) ;
 		screen.innerText = screenValue;
 		operand2 = false;
+		operand3= true;
 		screen.innerText = screenValue;
+		[...operatorsBtn].forEach(e => {
+			e.style.backgroundColor= "hsl(30,80%,50%)";
+			e.style.color="white"});
 	}else{
 		//set display by pushing inputs into the screen.
 		figure.push( parseFloat(number.target.innerText));
 		screenValue = parseFloat(figure.join("")) ;
 		screen.innerText = screenValue;
+		
 		
 	}
 	
@@ -97,10 +103,13 @@ decimal.addEventListener("click",(e)=>{
 //onclick, return all variables to default.
 clear.addEventListener("click",(e)=>{
 	
+	[...operatorsBtn].forEach(e => e.style.backgroundColor= "hsl(30,80%,50%)");
 	screenValue = "0";
 	figure = [];
+	operator=null;
 	operand1 = null;
-	operand2 = false;
+	operand2 = "false";
+	operand3 = false;
 	return screen.innerText = "0";
 
 })
@@ -137,11 +146,30 @@ const operators = {
 //save the operator clicked, activate activate operand2 and set current value as 0
 [...operatorsBtn].forEach(function(btn){
 	btn.addEventListener("click",(btn)=>{
+		if ( operator!== null && operand3 === true) {
+			let operator2 = btn.target.id;
+			let result = operators[operator]();
+			screenValue = result.toString();
+			screen.innerText = screenValue;
+			operand1 = parseFloat(screenValue)
+			figure = [];
+			screenValue = "0";
+			operator = operator2
+			btn.target.style.backgroundColor = "hsl(30,50%,80%)";
+			btn.target.style.color = "orange";
+			
+			return
+
+			// let result = operators[operator2]();
+		}
 		operand1 = parseFloat(screenValue)
 		figure = [];
 		operator = btn.target.id
 		operand2 = true;
 		screenValue = "0";
+		[...operatorsBtn].forEach(e => e.style.backgroundColor= "hsl(30,80%,50%)");
+		btn.target.style.backgroundColor = "hsl(30,50%,80%)";
+		btn.target.style.color = "orange";
 
 
 	})
@@ -157,10 +185,12 @@ const operators = {
 equalBtn.addEventListener("click", operate)
 
 function operate(){
-
+	operand3 = false;
 	// operators[operator];
 	// console.log(operator)
-
+	[...operatorsBtn].forEach(e => {
+		e.style.backgroundColor= "hsl(30,80%,50%)";
+		e.style.color="white"});
 	if(operand1 === null || operator === null){
 		return
 	}
@@ -168,5 +198,6 @@ function operate(){
 	screenValue=result.toString();
 	screen.innerText= screenValue;
 	figure = [];
+	operand3 = false;
 };	
 
