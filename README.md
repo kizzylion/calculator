@@ -2,6 +2,8 @@ Online Calculator
 
 A simple online calculator for basic arithmetic operations.
 
+live Demo: https://kizzylion.github.io/calculator/
+
 Features
 
 - Supports addition, subtraction, multiplication, and division operations.
